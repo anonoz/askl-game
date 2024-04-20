@@ -1,59 +1,33 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	let keyA = 65;
+	let keyS = 83;
+	let keyK = 75;
+	let keyL = 76;
+
+	let output_text = '';
+	let timer = 0;
+
+	function onKeyDown(e) {
+		output_text += `Key ${e.keyCode} hit at ${timer} <br>`;
+	}
 </script>
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" content="Generic rhythm game" />
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
+	<h1>ASKL</h1>
 
-		to your new<br />SvelteKit app
-	</h1>
+	<p>Type any of the A S K L, first hit starts the timer.</p>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<p
+		id="output-log"
+		class="container mx-auto w-[800px] h-[200px] bg-black overflow-scroll font-mono text-white p-2"
+	>
+		{@html output_text}
+	</p>
 </section>
 
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+<svelte:window on:keydown|preventDefault={onKeyDown} />
