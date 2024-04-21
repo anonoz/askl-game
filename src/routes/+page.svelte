@@ -56,7 +56,7 @@
 
 	// Each lane gets their own id => timings[]
 	let beatsStack: Array<Array<Number>> = {};
-	let ballsInLane = [[], [], [], []];
+	let ballsInLane: Array<Array<Number>> = [[], [], [], []];
 
 	let audioPlayer: HTMLMediaElement;
 
@@ -83,13 +83,17 @@
 			for (let timing of beatsStack[lane_id]) {
 				setTimeout(
 					() => {
-						ballsInLane[lane_id] = ballsInLane[lane_id] + [timing * 1000];
+						ballsInLane[lane_id] = [...ballsInLane[lane_id], timing * 1000];
 						console.log(`Adding ball ${lane_id} for time ${timing * 1000}`);
 
-						setTimeout(() => {
-							console.log(`Removing ball ${lane_id} #${timing * 1000}`);
-							ballsInLane[lane_id] = ballsInLane[lane_id].slice(1);
-						}, 500);
+						setTimeout(
+							() => {
+								console.log(`Removing ball ${lane_id} #${timing * 1000}`);
+								ballsInLane[lane_id] = ballsInLane[lane_id].slice(1);
+								console.log(ballsInLane);
+							},
+							1000 * graphicSettings.beatDuration + 300
+						);
 					},
 					1000.0 * (timing - graphicSettings.beatDuration)
 				);
@@ -201,13 +205,13 @@
 			{#each laneBalls as balls}
 				<img
 					in:fly={{ y: -1400, duration: 1200 }}
-					out:fade
+					out:fly={{ y: 200, duration: 100 }}
 					src={lanesGraphics[laneId].ball_graphic}
 					alt="hitpad"
 					class="hdpi block absolute"
 					style="left: {lanesGraphics[laneId].end_xy[0] -
-						graphicSettings.laneBallOffset}px; top:{lanesGraphics[laneId].end_xy[1] -
-						graphicSettings.laneBallOffset}px;"
+						graphicSettings.laneBallOffset +
+						50}px; top:{lanesGraphics[laneId].end_xy[1] - graphicSettings.laneBallOffset - 10}px;"
 				/>
 			{/each}
 		{/each}
